@@ -1,0 +1,10 @@
+__pycache__/
+_eric6project/
+.ropeproject
+.vscode/
+build/
+dist/
+RunTimeData/
+
+*.e4p
+*.spec

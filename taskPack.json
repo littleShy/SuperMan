@@ -1,0 +1,39 @@
+{
+    "code": "200",
+    "data": [
+        {
+            "taskdescription3": "试玩完成后可激活分享功能，获得额外收益\r\n",
+            "taskdescription4": "2",
+            "tasktype": 1,
+            "taskdescription1": "一定进行注册登录浏览&去做任务，安装应用→首日试玩5分钟（少于5分钟无效）&试玩过程中要有注册操作、动作、页面的跳转、深度浏览&次日必须登录，并且深度浏览，留存4-7天&试玩完成后可激活分享功能，获得额外收益",
+            "taskdate": 5,
+            "taskdescription2": "试玩过程中要有操作、动作、页面的跳转、深度浏览\r\n",
+            "tasklogo": "http://www.xianlongkeji.cn/tqy02/",
+            "taskuserappdo": 0.4,
+            "taskname": "天天快报",
+            "taskmoney": 1.0,
+            "taskbao": "com.tencent.reading",
+            "taskurl": "http://a.app.qq.com/o/commonapp-down?g_f=1000361&pkgName=com.tencent.reading",
+            "downloadtimes": "85",
+            "tasktitle": "天天快报",
+            "taskid": 161
+        },
+        {
+            "taskdescription3": "1",
+            "taskdescription4": "2",
+            "tasktype": 1,
+            "taskdescription1": "一定进行注册登录浏览&去做任务，安装应用→首日试玩5分钟（少于5分钟无效）&试玩过程中要有注册操作、动作、页面的跳转、深度浏览&次日必须登录，并且深度浏览，留存4-7天&试玩完成后可激活分享功能，获得额外收益",
+            "taskdate": 5,
+            "taskdescription2": "1",
+            "tasklogo": "http://www.xianlongkeji.cn/tqy03/",
+            "taskuserappdo": 0.1,
+            "taskname": "新浪微博2",
+            "taskmoney": 0.8,
+            "taskbao": "com.sina.weibo",
+            "taskurl": "http://down.apps.sina.cn/sinasrc/86/2a/3db544fa96455c5deb38d2cf54bc2a86.apk",
+            "downloadtimes": "548",
+            "tasktitle": "新浪微博2",
+            "taskid": 312
+        }
+    ]
+}
