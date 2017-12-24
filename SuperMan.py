@@ -2,10 +2,8 @@ import sys
 from enum import Enum
 
 import logger
-import MainWindow
 import TaskThread
 
-sys.path.append('UI')
 
 class ArgOption(Enum):
     net = '--net-type'
@@ -19,30 +17,6 @@ showProgress = False
 doTaskType = 'all'
 usePlayInterval = True
 maxError = 1
-
-class MainClass(object):
-    """
-    """
-    app = None
-    mainWindow = QtWidgets.QMainWindow()
-    taskThread = TaskThread.TaskThread()
-    def __init__(self):
-        ui = MainWindow(mainWindow)
-
-    def handleUI(self):
-        """
-        """
-        self.app = QtWidgets.QApplication(sys.argv)
-        self.mainWindow.show()
-        return self.app.exec_()
-    
-    def signalSlot(self):
-        self.mainWindow.netClassifyChangedSignal.connect(self.taskThread.)
-
-    def handleData(self):
-        self.taskThread.start()
-
-
 
 def _getOption(option, boolOption=False):
     if option in sys.argv :

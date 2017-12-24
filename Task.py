@@ -149,6 +149,7 @@ class Task:
     # }
     def reInitTaskListWithLastTask(self, lastTaskList={}):
         self.logger._log.debug('上次任务完成情况: {}'.format(lastTaskList))
+        self.currentTaskName = ''
         if len(lastTaskList) != 0:
             if 'lastTaskName' in lastTaskList:
                 unfinishedTaskNameList = []
