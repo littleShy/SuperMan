@@ -4,14 +4,18 @@ import ConstData
 import logger
 import FileOper
 import os
+from PyQt5.QtCore import QThread, pyqtSignal
 
-class TaskThread:
+class TaskThread(QThread):
+    netClassifyList = ['unicom', 'chinanetA', 'chinanetB', 'chinanetC']
     logger = logger.log
     threadList = []
     missionList = []
     tasksStatus = []
     userNameList = []
     fileOper = FileOper.fileOper
+
+    allTaskFinishedSignal = pyqtSignal(bool)
 
     netClassify = ''
     doTaskType = 'all'
@@ -44,7 +48,10 @@ class TaskThread:
     def setGetAds(self, getAds):
         self.getAds = getAds
 
-    def start(self, doTaskType='all', netClassify='', maxError=1, usePlayInterval=True, showProgress=False, getAds=True):
+    def run(self):
+        print('doTaskType:{}, maxError:{}, usePlayInterval:{}, showProgress:{}, getAds:{}.'.format(\
+        self.doTaskType, self.maxError,self.usePlayInterval,self.showProgress, self.getAds))
+        return
         lastTaskStatusList = self.getLastTasksStatus()
         userAuth = []
         if self.netClassify in ConstData.userAuthList:
@@ -72,6 +79,8 @@ class TaskThread:
             self.threadList.append(thd)
         for thd in self.threadList :
             thd.join()
+
+        self.allTaskFinishedSignal.emit(False)
     
     def getLastTasksStatus(self):
         lastTasksStatus = {}
@@ -80,5 +89,6 @@ class TaskThread:
             if lastTask == None:
                 break
             lastTasksStatus.update(lastTask)
-        self.fileOper.clean()
+        if self.doTaskType == Task.DoTaskType.doAllTask:
+            self.fileOper.clean()
         return lastTasksStatus

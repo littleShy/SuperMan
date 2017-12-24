@@ -7,7 +7,7 @@ Module implementing MainWindow.
 import sys
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from PyQt5.QtWidgets import QMainWindow
 
 import Ui_Progresses
@@ -34,9 +34,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(parent)
         self.initSignalSlot()
-        self.progressForm = QtWidgets.QWidget()
-        ui = Ui_Progresses.Ui_progressForm()
-        ui.setupUi(self.progressForm)
+        # self.progressForm = QtWidgets.QWidget()
+        # ui = Ui_Progresses.Ui_progressForm()
+        # ui.setupUi(self.progressForm)
     
     def initSignalSlot(self):
 
@@ -93,11 +93,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.progressForm.hide()
         self.beginDoTaskSignal.emit(checked)
 
-
-if __name__ == "__main__":
-    import sys
+class UIThread(QThread):
+    """
+    """
     app = QtWidgets.QApplication(sys.argv)
-    mainWindow = QtWidgets.QMainWindow()
-    ui = MainWindow(mainWindow)
-    mainWindow.show()
-    sys.exit(app.exec_())
+    mainWindow =  MainWindow()
+    def run(self):
+        mainWindow.show()
+        return self.app.exec_()

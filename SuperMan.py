@@ -1,82 +1,36 @@
 import sys
 from enum import Enum
 
+from PyQt5.QtCore import QThread
+
 import logger
+sys.path.append('UI')
 import MainWindow
 import TaskThread
 
-sys.path.append('UI')
 
-class ArgOption(Enum):
-    net = '--net-type'
-    showProgress = '--show-progress'
-    doTaskType = '--do-task-type'
-    maxError = '--max-error'
-    usePlayInterval = '--use-play-interval'
-
-netClassify = ''
-showProgress = False
-doTaskType = 'all'
-usePlayInterval = True
-maxError = 1
 
 class MainClass(object):
     """
     """
+    threads = []
     app = None
-    mainWindow = QtWidgets.QMainWindow()
+    uiThread = MainWindow.UIThread()
     taskThread = TaskThread.TaskThread()
     def __init__(self):
-        ui = MainWindow(mainWindow)
-
-    def handleUI(self):
-        """
-        """
-        self.app = QtWidgets.QApplication(sys.argv)
-        self.mainWindow.show()
-        return self.app.exec_()
-    
+        self.signalSlot()
+  
     def signalSlot(self):
-        self.mainWindow.netClassifyChangedSignal.connect(self.taskThread.)
+        self.uiThread.mainWindow.netClassifyChangedSignal.connect(self.taskThread.setNetClassify)
+        self.uiThread.mainWindow.usePlayInterValSignal.connect(self.taskThread.setUsePlayInterval)
+        self.uiThread.mainWindow.doTaskTypeChangedSignal.connect(self.taskThread.setDoTaskType)
+        self.uiThread.mainWindow.beginDoTaskSignal.connect(self.taskThread.start())
+        self.taskThread.allTaskFinishedSignal.connect(self.uiThread.mainWindow.on_doTask_clicked)
 
-    def handleData(self):
-        self.taskThread.start()
+    def start(self):
+        self.uiThread.start()
 
-
-
-def _getOption(option, boolOption=False):
-    if option in sys.argv :
-        optionIndex = sys.argv.index(option) + 1
-        if optionIndex < len(sys.argv):
-            optValue = sys.argv[optionIndex]
-            if boolOption:
-                if str(optValue.lower()) == 'true':
-                    return True
-                elif str(optValue.lower()) == 'false':
-                    return False
-            else:
-                return optValue
-    return None
-
-def getOption():
-    global netClassify, showProgress, doTaskType, maxError, usePlayInterval
-    optValue = _getOption(ArgOption.net.value)
-    if optValue != None:
-        netClassify = optValue
-    optValue = _getOption(ArgOption.showProgress.value, True)
-    if optValue != None:
-        showProgress = optValue
-    optValue = _getOption(ArgOption.doTaskType.value)
-    if optValue != None:
-        doTaskType = optValue
-    optValue = _getOption(ArgOption.maxError.value)
-    if optValue != None:
-        maxError = optValue
-    optValue = _getOption(ArgOption.usePlayInterval.value, True)
-    if optValue != None:
-        usePlayInterval = optValue
-
-getOption()
-TaskThread.TaskThread().start(doTaskType, netClassify, maxError, usePlayInterval, showProgress)
-
+# getOption()
+# TaskThread.TaskThread().start(doTaskType, netClassify, maxError, usePlayInterval, showProgress)
+MainClass().start()
 input('所有任务已结束,回车退出!')
