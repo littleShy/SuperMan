@@ -10,7 +10,6 @@ import logger
 import NetTrans
 import ProgressManager
 
-
 class TaskType(Enum):
     play = 2
     share = 3
@@ -42,6 +41,7 @@ class TaskStatus(Enum):
     accomplished = 3
     notEnough = 999
 
+
 class Task:
     userName = ''
     taskDict = {}
@@ -71,6 +71,7 @@ class Task:
     usePlayInterval = True
     showProgress = False
     userVerification = False
+    taskStatus = TaskStatus.allAvaliable.value
 
     def __init__(self, userName, authUrl, maxError=1, usePlayInterval=True, showProgress=False, progressName='Task'):
         self.maxError = maxError
@@ -91,13 +92,14 @@ class Task:
         if jsonResult == None:
             return False
         resuleDict = self.jsonDecoder.decode(jsonResult)
-        if self.checkResult(resuleDict) :
+        result, msg = self.checkResult(resuleDict)
+        if  result :
             self.netTrans.request(resuleDict['count_url'])
             self.viewCommonUrls()
             self.logger._log.debug('用户校验成功')
             return True
         else:
-            self.logger._log.error('用户校验失败')
+            self.logger._log.error('用户校验失败: %', msg)
             return False
 
     def viewCommonUrls(self):
@@ -107,22 +109,25 @@ class Task:
 
     def checkResult(self, resuleDict):
         resuleCode = 0
+        message = ''
         if 'code' in resuleDict.keys():
             resuleCode = resuleDict['code']
             if 200 == resuleDict['code'] or '200' == resuleDict['code']:
-                return True
+                return True, ''
             elif 'message' in resuleDict.keys():
-                self.logger._log.debug('code: %s, %s', str(resuleCode), resuleDict['message'])
+                message = resuleDict['message']
             
         if 'succ' in resuleDict.keys():
             if 1 == resuleDict['succ'] or '1' == resuleDict['succ']:
-                return True
+                return True, ''
             elif 'message' in resuleDict.keys():
-                self.logger._log.debug('success: %s, %s', str(resuleDict['succ']), resuleDict['message'])
+                message = resuleDict['message']
+            
+        self.logger._log.debug('success: %s, %s', str(resuleDict['succ']), message)
 
         if resuleCode != 500 :
-            self.errorCount += 1
-        return False
+            self.errorCount += 1        
+        return False, message
 
     # taskList = {
     #     'taskname' : {
@@ -149,9 +154,9 @@ class Task:
     # }
     def reInitTaskListWithLastTask(self, lastTaskList={}):
         self.logger._log.debug('上次任务完成情况: {}'.format(lastTaskList))
-        self.currentTaskName = ''
         if len(lastTaskList) != 0:
             if 'lastTaskName' in lastTaskList:
+                self.currentTaskName = lastTaskList['lastTaskName']
                 unfinishedTaskNameList = []
                 if 'unfinishedTask' in lastTaskList:
                     unfinishedTaskNameList = lastTaskList['unfinishedTask']
@@ -189,11 +194,12 @@ class Task:
             self.errorCount += 1
             return False
         resuleDict = self.jsonDecoder.decode(jsonResult)
-
-        if self.checkResult(resuleDict) :
+        result, msg = self.checkResult(resuleDict)
+        if result :
             self.initTaskListByOriTask(resuleDict['data'])
             return True
         else:
+            self.logger._log.error('获取任务失败: %', msg)
             return False
 
     #查询单个任务完成情况
@@ -209,12 +215,10 @@ class Task:
             return -1
 
         resuleDict = self.jsonDecoder.decode(jsonResult)
-
-        if self.checkResult(resuleDict) :
+        result, msg = self.checkResult(resuleDict)
+        if result :
             resultCode = resuleDict['jianshi']
-            if resultCode == TaskStatus.notEnough.value:
-                self.logger._log.warn('%s 任务状态 可用份数不足!',self.currentTaskName)
-            elif resultCode == TaskStatus.accomplished.value:
+            if resultCode == TaskStatus.accomplished.value:
                 self.logger._log.debug('%s 任务状态 已完成',self.currentTaskName)
             elif resultCode == TaskStatus.shareAvaliable.value:
                 self.logger._log.debug('%s 可做分享.', self.currentTaskName)
@@ -222,6 +226,9 @@ class Task:
                 self.logger._log.debug('%s 任务状态 可试玩', self.currentTaskName)
             return resultCode
         else:
+            if msg.find('此限量任务已被做完'):
+                self.logger._log.warn('%s 任务状态 可用份数不足!',self.currentTaskName)
+                return TaskStatus.notEnough.value
             self.logger._log.warn('%s 任务状态获取失败!', self.currentTaskName)
             return -1
     
@@ -282,8 +289,11 @@ class Task:
                 self.errorCount += 1
                 return false
             resuleDict = self.jsonDecoder.decode(jsonResult)
-            if self.checkResult(resuleDict) :
+            result, msg = self.checkResult(resuleDict)
+            if result:
                 return True
+            elif -1 == msg.find('网络延时'):
+                return False
         return False
     
     def doTask(self, lastTasks={}, doTaskType=DoTaskType.doAllTask.value):

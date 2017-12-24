@@ -19,32 +19,16 @@ class TaskThread:
     usePlayInterval = True
     showProgress = False
     getAds = True
-    def setNetClassify(self, index):
-        if 0 == index:
-            self.netClassify = 'unicom'
-        elif 1 == index:
-            self.netClassify = 'chinanetA'
-        elif 2 == index:
-            self.netClassify = 'chinanetC'
-        elif 3 == index:
-            self.netClassify = 'chinanetC'
 
-    def setDoTaskType(self, index):
-        doTaskType = index
-    
-    def setMaxError(self, maxError):
+    def __init__(self, doTaskType='all', netClassify='', maxError=1, usePlayInterval=True, showProgress=False, getAds=True):
+        self.doTaskType = doTaskType
+        self.netClassify = netClassify
         self.maxError = maxError
-    
-    def setUsePlayInterval(self, usePlayInterval):
         self.usePlayInterval = usePlayInterval
-
-    def setShowProgress(self, showProgress):
         self.showProgress = showProgress
-    
-    def setGetAds(self, getAds):
         self.getAds = getAds
-
-    def start(self, doTaskType='all', netClassify='', maxError=1, usePlayInterval=True, showProgress=False, getAds=True):
+    
+    def start(self):
         lastTaskStatusList = self.getLastTasksStatus()
         userAuth = []
         if self.netClassify in ConstData.userAuthList:

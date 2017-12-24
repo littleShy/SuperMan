@@ -2,14 +2,14 @@ userAuthList = {
     'unicom' : {
         #联通
         'ZZR5032031' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=351888062784734&sw=720&sh=1280&osver=18',
-        'ZZR1094018' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=862751022897834&sw=540&sh=960&osver=17',
-        'ZZR906155' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=862297025534651&sw=540&sh=960&osver=17',
-        'ZZR197745' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=A100003A5268D8&sw=720&sh=1280&osver=19',
-        'ZZR112004' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=864891028382056&sw=720&sh=1280&osver=18',
-        'ZZR711001' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=861799030658418&sw=720&sh=1280&osver=22',
-        'ZZR129152' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=861799030658012&sw=720&sh=1280&osver=22',
-        'ZZR1083072' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=353769058684658&sw=720&sh=1280&osver=18',
-        'ZZR152038' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=862845021308858&sw=1080&sh=1800&osver=19'
+        # 'ZZR1094018' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=862751022897834&sw=540&sh=960&osver=17',
+        # 'ZZR906155' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=862297025534651&sw=540&sh=960&osver=17',
+        # 'ZZR197745' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=A100003A5268D8&sw=720&sh=1280&osver=19',
+        # 'ZZR112004' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=864891028382056&sw=720&sh=1280&osver=18',
+        # 'ZZR711001' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=861799030658418&sw=720&sh=1280&osver=22',
+        # 'ZZR129152' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=861799030658012&sw=720&sh=1280&osver=22',
+        # 'ZZR1083072' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=353769058684658&sw=720&sh=1280&osver=18',
+        # 'ZZR152038' : 'http://sdk.cferw.com/api.php?z=3286&appkey=528ab6a566564a96a0b7646586f3c017&deviceId=862845021308858&sw=1080&sh=1800&osver=19'
     },
     'chinanetA':{
         #电信A

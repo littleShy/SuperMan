@@ -12,7 +12,7 @@ class FileOper:
     log = logger.log
     filePos = 0
     jsonDecoder = json.JSONDecoder()
-    jsonEncoder = json.JSONEncoder()
+    jsonEncoder = json.JSONEncoder(ensure_ascii=False)
     @property
     def lock(self):
         return self._lock

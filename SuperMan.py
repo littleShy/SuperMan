@@ -4,7 +4,6 @@ from enum import Enum
 import logger
 import TaskThread
 
-
 class ArgOption(Enum):
     net = '--net-type'
     showProgress = '--show-progress'
@@ -51,6 +50,6 @@ def getOption():
         usePlayInterval = optValue
 
 getOption()
-TaskThread.TaskThread().start(doTaskType, netClassify, maxError, usePlayInterval, showProgress)
+TaskThread.TaskThread(doTaskType, netClassify, maxError, usePlayInterval, showProgress).start()
 
 input('所有任务已结束,回车退出!')

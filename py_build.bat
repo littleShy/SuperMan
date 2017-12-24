@@ -1,0 +1,1 @@
+pyinstaller --log-level DEBUG --ico="Iron_Man1.ico" -F SuperMan.py
