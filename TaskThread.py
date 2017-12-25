@@ -14,13 +14,13 @@ class TaskThread:
     fileOper = FileOper.fileOper
 
     netClassify = ''
-    doTaskType = 'all'
+    doTaskType = Task.DoTaskType.doAllTask.value
     maxError = 1
     usePlayInterval = True
     showProgress = False
     getAds = True
 
-    def __init__(self, doTaskType='all', netClassify='', maxError=1, usePlayInterval=True, showProgress=False, getAds=True):
+    def __init__(self, doTaskType=Task.DoTaskType.doAllTask.value, netClassify='', maxError=1, usePlayInterval=True, showProgress=False, getAds=True):
         self.doTaskType = doTaskType
         self.netClassify = netClassify
         self.maxError = maxError
@@ -47,8 +47,8 @@ class TaskThread:
                 for value in userComment.values():
                     comment += value + '-'
             threadName = comment + userName
-            task = Task.Task(userName, userAuth[userName], self.maxError, self.usePlayInterval, self.showProgress, threadName)
-            thd = threading.Thread(target=task.doTask,args=(lastTaskStatus, self.doTaskType,),name=threadName)
+            task = Task.Task(userName, userAuth[userName], self.doTaskType, self.maxError, self.usePlayInterval, self.showProgress, threadName)
+            thd = threading.Thread(target=task.doTask,args=(lastTaskStatus,),name=threadName)
             thd.setDaemon(False)
             thd.start()
             self.userNameList.append(userName)
@@ -64,5 +64,9 @@ class TaskThread:
             if lastTask == None:
                 break
             lastTasksStatus.update(lastTask)
-        self.fileOper.clean()
+        if self.doTaskType == Task.DoTaskType.doAllTask.value:
+            self.fileOper.clean()
+            print('delete all')
+        else:
+            print('dont delete: ', self.doTaskType, )
         return lastTasksStatus

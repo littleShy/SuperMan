@@ -22,17 +22,11 @@ class TaskType3(Enum):
     play = 3
     share = 2
 
-# class DoTaskType(Enum):
-#     doPlayTask = "play"
-#     doShareTask = "share"
-#     doQueryStatus = "query"
-#     doAllTask = "all"
-
 class DoTaskType(Enum):
-    doAllTask = "0"
-    doPlayTask = "1"
-    doShareTask = "2"
-    doQueryStatus = "3"
+    doPlayTask = "play"
+    doShareTask = "share"
+    doQueryStatus = "query"
+    doAllTask = "all"
 
 class TaskStatus(Enum):
     allAvaliable = 0
@@ -40,7 +34,6 @@ class TaskStatus(Enum):
     playAvaliable = 2
     accomplished = 3
     notEnough = 999
-
 
 class Task:
     userName = ''
@@ -72,9 +65,11 @@ class Task:
     showProgress = False
     userVerification = False
     taskStatus = TaskStatus.allAvaliable.value
+    doTaskType = DoTaskType.doAllTask.value
 
-    def __init__(self, userName, authUrl, maxError=1, usePlayInterval=True, showProgress=False, progressName='Task'):
+    def __init__(self, userName, authUrl, doTaskType=DoTaskType.doAllTask.value, maxError=1, usePlayInterval=True, showProgress=False, progressName='Task'):
         self.maxError = maxError
+        self.doTaskType = doTaskType
         self.showProgress = showProgress
         self.usePlayInterval = usePlayInterval
         self.totalProgressID = progressName
@@ -296,7 +291,7 @@ class Task:
                 return False
         return False
     
-    def doTask(self, lastTasks={}, doTaskType=DoTaskType.doAllTask.value):
+    def doTask(self, lastTasks={}):
         if not self.userVerification:
             return
         self.logger._log.debug('=======开始做任务=======')
@@ -308,12 +303,12 @@ class Task:
             self.currentTaskName = task['taskname']
             taskStatus = self.taskStatus(self.currentTaskName)
 
-            if taskStatus != TaskStatus.accomplished.value and doTaskType != DoTaskType.doQueryStatus.value :
+            if taskStatus != TaskStatus.accomplished.value and self.doTaskType != DoTaskType.doQueryStatus.value :
                 if taskStatus == TaskStatus.notEnough.value:
                     self.recordUnfinishedTask(self.currentTaskName)
                 else:
                     if (taskStatus == TaskStatus.allAvaliable.value or taskStatus == TaskStatus.playAvaliable.value) \
-                    and (doTaskType == DoTaskType.doPlayTask.value or doTaskType == DoTaskType.doAllTask.value):
+                    and (self.doTaskType == DoTaskType.doPlayTask.value or self.doTaskType == DoTaskType.doAllTask.value):
                         self.logger._log.debug('%s 试玩中...', self.currentTaskName)
                         if self.usePlayInterval:
                             self.randomSleep(self.minPlayIntervel, self.maxPlayIntervel)
@@ -324,7 +319,7 @@ class Task:
                             self.logger._log.error('%s 试玩失败!', self.currentTaskName)
                     
                     if (taskStatus == TaskStatus.allAvaliable.value or taskStatus == TaskStatus.shareAvaliable.value) \
-                    and (doTaskType == DoTaskType.doAllTask.value or doTaskType == DoTaskType.doShareTask.value):
+                    and (self.doTaskType == DoTaskType.doAllTask.value or self.doTaskType == DoTaskType.doShareTask.value):
                         self.logger._log.debug('%s 分享中...', self.currentTaskName)
                         if self._doTask(self.currentTaskName, TaskType.share.value) :
                             self.logger._log.debug('%s 分享完成.', self.currentTaskName)
