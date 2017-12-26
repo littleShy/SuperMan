@@ -105,6 +105,7 @@ class Task:
     def checkResult(self, resuleDict):
         resuleCode = 0
         message = ''
+        code = 0
         if 'code' in resuleDict.keys():
             resuleCode = resuleDict['code']
             if 200 == resuleDict['code'] or '200' == resuleDict['code']:
@@ -118,7 +119,7 @@ class Task:
             elif 'message' in resuleDict.keys():
                 message = resuleDict['message']
             
-        self.logger._log.debug('success: %s, %s', str(resuleDict['succ']), message)
+        self.logger._log.debug('result code : %s, %s', resuleCode, message)
 
         if resuleCode != 500 :
             self.errorCount += 1        
