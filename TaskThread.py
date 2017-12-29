@@ -66,7 +66,6 @@ class TaskThread:
             lastTasksStatus.update(lastTask)
         if self.doTaskType == Task.DoTaskType.doAllTask.value:
             self.fileOper.clean()
-            print('delete all')
         else:
-            print('dont delete: ', self.doTaskType, )
+            pass
         return lastTasksStatus

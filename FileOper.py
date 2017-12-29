@@ -27,7 +27,7 @@ class FileOper:
     def writeObj(self, obj):
         with self.lock:
             try:
-                with open(self.fileName, 'a+') as fh:
+                with open(self.fileName, 'a+', encoding='utf-8') as fh:
                     # pickle.dump(obj, fh)
                     objStr = self.jsonEncoder.encode(obj)
                     fh.write(objStr + '\n')
@@ -41,7 +41,7 @@ class FileOper:
                     return None
                 if self.filePos == os.path.getsize(self.fileName):
                     return None
-                with open(self.fileName, 'r+') as fh:
+                with open(self.fileName, 'r+', encoding='utf-8') as fh:
                     fh.seek(self.filePos)
                     # obj = pickle.load(fh)
                     obj = self.jsonDecoder.decode(fh.readline())
