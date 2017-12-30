@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 import logging
 import logging.handlers
 import time
@@ -13,15 +15,15 @@ class Logger:
     if not os.path.exists(dirName):
         os.makedirs(dirName)
         
-    __handler__ =  logging.handlers.RotatingFileHandler(fileFullName, maxBytes = 1024*1024, backupCount = 5) # 实例化
+    __handler__ =  logging.handlers.RotatingFileHandler(fileFullName, maxBytes = 1024*1024, backupCount = 5) 
     __fmt__ = '%(asctime)s - %(filename)s:%(lineno)s[%(threadName)s] %(message)s'
     __formatter__ = None
     def __init__(self):
-        self.__formatter__ = logging.Formatter(self.__fmt__)   # 实例化formatter
-        self.__handler__.setFormatter(self.__formatter__)      # 为handler添加formatter
+        self.__formatter__ = logging.Formatter(self.__fmt__) 
+        self.__handler__.setFormatter(self.__formatter__)
 
-        self._log = logging.getLogger(self.__logName__)    # 获取名为tst的logger
-        self._log.addHandler(self.__handler__)           # 为logger添加handler
+        self._log = logging.getLogger(self.__logName__)
+        self._log.addHandler(self.__handler__)
         self.setLevel(logging.DEBUG)
 
     def setLevel(self, logLevel):

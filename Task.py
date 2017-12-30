@@ -8,7 +8,7 @@ import ConstData
 import FileOper
 import logger
 import NetTrans
-import ProgressManager
+# import ProgressManager
 
 class TaskType(Enum):
     play = 2
@@ -58,7 +58,7 @@ class Task:
     logger = logger.log
     netTrans = NetTrans.NetTrans()
     jsonDecoder = json.JSONDecoder()
-    progressManager = ProgressManager.progressManager
+    # progressManager = ProgressManager.progressManager
     totalProgressID = ''
     taskProgressID = ''
     usePlayInterval = True
@@ -261,17 +261,18 @@ class Task:
         return dataDict
 
     def addProgressBar(self):
-        self.progressManager.addLineProgress(self.totalProgressID,'{0: ^20}'.format(self.totalProgressID))
-        self.progressManager.addLineProgress(self.taskProgressID,'{0: >15}'.format(self.currentTaskName))
+        # self.progressManager.addLineProgress(self.totalProgressID,'{0: ^20}'.format(self.totalProgressID))
+        # self.progressManager.addLineProgress(self.taskProgressID,'{0: >15}'.format(self.currentTaskName))
+        pass
 
     def updateProgressBar(self, progress):
         if len(self.taskDict) == 0:
             totalProgress = 100
         else:
             totalProgress = self.currentTaskIndex/len(self.taskDict) * 100
-        self.progressManager.update(self.totalProgressID, totalProgress)
-        self.progressManager.renameProgress(self.taskProgressID, '{0: >15}'.format(self.currentTaskName))
-        self.progressManager.update(self.taskProgressID, progress)
+        # self.progressManager.update(self.totalProgressID, totalProgress)
+        # self.progressManager.renameProgress(self.taskProgressID, '{0: >15}'.format(self.currentTaskName))
+        # self.progressManager.update(self.taskProgressID, progress)
 
     #试玩任务
     def _doTask(self, taskName, taskType):
