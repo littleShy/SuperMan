@@ -74,13 +74,10 @@ class Task:
         self.usePlayInterval = usePlayInterval
         self.totalProgressID = progressName
         self.taskProgressID = self.totalProgressID + '-'
-        if self.showProgress:
-            self.addProgressBar()
         self.userName = userName
         if self.userAuth(authUrl) :
             self.userVerification = True
-            if self.refreshTask() and self.showProgress:
-                self.updateProgressBar(100)
+        self.refreshTask()
 
     def userAuth(self, authUrl):
         jsonResult = self.netTrans.request(authUrl)
@@ -105,20 +102,20 @@ class Task:
     def checkResult(self, resuleDict):
         resuleCode = 0
         message = ''
-        if 'code' in resuleDict.keys():
+        if 'code' in resuleDict:
             resuleCode = resuleDict['code']
             if 200 == resuleDict['code'] or '200' == resuleDict['code']:
                 return True, ''
-            elif 'message' in resuleDict.keys():
+            elif 'message' in resuleDict:
                 message = resuleDict['message']
-            
-        if 'succ' in resuleDict.keys():
+
+        if 'succ' in resuleDict:
             if 1 == resuleDict['succ'] or '1' == resuleDict['succ']:
                 return True, ''
-            elif 'message' in resuleDict.keys():
+            elif 'message' in resuleDict:
                 message = resuleDict['message']
             
-        self.logger._log.debug('success: %s, %s', str(resuleDict['succ']), message)
+        self.logger._log.debug('code: %s, %s', str(resuleCode), message)
 
         if resuleCode != 500 :
             self.errorCount += 1        
@@ -205,7 +202,7 @@ class Task:
         dataDict = {'taskname':taskName, 'username': self.userName}
         jsonResult = self.netTrans.request(ConstData.taskUrls['taskStatus'], NetTrans.TransType['POST'], dataDict)
         if jsonResult == None:
-            self.logger._log.warn('%s 任务状态获取失败!', self.currentTaskName)
+            self.logger._log.warn('%s 任务状态获取失败!', self.currentTaskName.replace(u'\xa0', u' '))
             self.errorCount += 1
             return -1
 
@@ -214,17 +211,17 @@ class Task:
         if result :
             resultCode = resuleDict['jianshi']
             if resultCode == TaskStatus.accomplished.value:
-                self.logger._log.debug('%s 任务状态 已完成',self.currentTaskName)
+                self.logger._log.debug('%s 任务状态 已完成', self.currentTaskName.replace(u'\xa0', u' '))
             elif resultCode == TaskStatus.shareAvaliable.value:
-                self.logger._log.debug('%s 可做分享.', self.currentTaskName)
+                self.logger._log.debug('%s 可做分享.', self.currentTaskName.replace(u'\xa0', u' '))
             elif resultCode == TaskStatus.playAvaliable.value:
-                self.logger._log.debug('%s 任务状态 可试玩', self.currentTaskName)
+                self.logger._log.debug('%s 任务状态 可试玩', self.currentTaskName.replace(u'\xa0', u' '))
             return resultCode
         else:
             if msg.find('此限量任务已被做完'):
-                self.logger._log.warn('%s 任务状态 可用份数不足!',self.currentTaskName)
+                self.logger._log.warn('%s 任务状态 可用份数不足!', self.currentTaskName.replace(u'\xa0', u' '))
                 return TaskStatus.notEnough.value
-            self.logger._log.warn('%s 任务状态获取失败!', self.currentTaskName)
+            self.logger._log.warn('%s 任务状态获取失败!', self.currentTaskName.replace(u'\xa0', u' '))
             return -1
     
     # 试玩任务完成
@@ -293,8 +290,8 @@ class Task:
         return False
     
     def doTask(self, lastTasks={}):
-        if not self.userVerification:
-            return
+        # if not self.userVerification:
+        #     return
         self.logger._log.debug('=======开始做任务=======')
         self.currentTaskIndex = 0
         self.reInitTaskListWithLastTask(lastTasks)
@@ -310,23 +307,23 @@ class Task:
                 else:
                     if (taskStatus == TaskStatus.allAvaliable.value or taskStatus == TaskStatus.playAvaliable.value) \
                     and (self.doTaskType == DoTaskType.doPlayTask.value or self.doTaskType == DoTaskType.doAllTask.value):
-                        self.logger._log.debug('%s 试玩中...', self.currentTaskName)
+                        self.logger._log.debug('%s 试玩中...', self.currentTaskName.replace(u'\xa0', u' '))
                         if self.usePlayInterval:
                             self.randomSleep(self.minPlayIntervel, self.maxPlayIntervel)
                         if self._doTask(self.currentTaskName, TaskType.play.value) :
-                            self.logger._log.debug('%s 试玩完成.', self.currentTaskName)
+                            self.logger._log.debug('%s 试玩完成.', self.currentTaskName.replace(u'\xa0', u' '))
                         else:
                             self.recordUnfinishedTask(self.currentTaskName)
-                            self.logger._log.error('%s 试玩失败!', self.currentTaskName)
+                            self.logger._log.error('%s 试玩失败!', self.currentTaskName.replace(u'\xa0', u' '))
                     
                     if (taskStatus == TaskStatus.allAvaliable.value or taskStatus == TaskStatus.shareAvaliable.value) \
                     and (self.doTaskType == DoTaskType.doAllTask.value or self.doTaskType == DoTaskType.doShareTask.value):
-                        self.logger._log.debug('%s 分享中...', self.currentTaskName)
+                        self.logger._log.debug('%s 分享中...', self.currentTaskName.replace(u'\xa0', u' '))
                         if self._doTask(self.currentTaskName, TaskType.share.value) :
-                            self.logger._log.debug('%s 分享完成.', self.currentTaskName)
+                            self.logger._log.debug('%s 分享完成.', self.currentTaskName.replace(u'\xa0', u' '))
                         else:
                             self.recordUnfinishedTask(self.currentTaskName)
-                            self.logger._log.error('%s 分享失败!', self.currentTaskName)
+                            self.logger._log.error('%s 分享失败!', self.currentTaskName.replace(u'\xa0', u' '))
             self.currentTaskIndex += 1
             self.randomSleep(self.minTaskIntervel, self.maxTaskIntervel)
             if int(self.errorCount) >= int(self.maxError) and int(self.maxError) != -1:

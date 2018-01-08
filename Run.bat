@@ -1,1 +1,1 @@
-python SuperMan.py --net-type unicom --show-progress false --do-task-type all --max-error 1 --use-play-interval true
+python SuperMan.py --net-type WangTi-3 --show-progress false --do-task-type all --max-error 1 --use-play-interval true
